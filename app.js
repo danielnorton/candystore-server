@@ -6,6 +6,7 @@ var app = module.exports = express.createServer();
 var config = require('config');
 var request = require('request');
 
+
 // Configuration
 app.configure(function(){
   app.set('views', __dirname + '/views');
@@ -33,10 +34,10 @@ app.get('/', function(req, res){
 });
 
 app.get('/products', function(req, res) {
-  
+
   var path = config.couch_server + config.databases.products + '/_all_docs?include_docs=true';
   request({uri:path}, function(error, response, body) {
-        
+
     var raw = JSON.parse(body);
     var rows = raw.rows;
     var answer = [];
@@ -45,6 +46,9 @@ app.get('/products', function(req, res) {
       var row = rows[i].doc;
       delete row._id;
       delete row._rev;
+      row.retina_image = '/public/images/' + row.retina_image;
+      row.image = '/public/images/' + row.image;
+      
       answer.push(row);
     }
 
