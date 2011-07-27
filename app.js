@@ -1,14 +1,12 @@
-
 /**
  * Module dependencies.
  */
-
 var express = require('express');
-
 var app = module.exports = express.createServer();
+var config = require('config');
+var request = require('request');
 
 // Configuration
-
 app.configure(function(){
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
@@ -28,12 +26,32 @@ app.configure('production', function(){
 });
 
 // Routes
-
 app.get('/', function(req, res){
   res.render('index', {
-    title: 'Express'
+    title: 'Candy Store Services'
   });
 });
 
+app.get('/products', function(req, res) {
+  
+  var path = config.couch_server + config.databases.products + '/_all_docs?include_docs=true';
+  request({uri:path}, function(error, response, body) {
+        
+    var raw = JSON.parse(body);
+    var rows = raw.rows;
+    var answer = [];
+    for (var i in rows) {
+      
+      var row = rows[i].doc;
+      delete row._id;
+      delete row._rev;
+      answer.push(row);
+    }
+
+    res.header('Content-Type', 'application/json');
+    res.send(answer);
+  });
+});
+ 
 app.listen(3000);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
