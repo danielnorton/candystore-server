@@ -46,8 +46,8 @@ app.get('/products', function(req, res) {
       var row = rows[i].doc;
       delete row._id;
       delete row._rev;
-      row.retina_image = '/public/images/' + row.retina_image;
-      row.image = '/public/images/' + row.image;
+      row.retina_image = '/images/' + row.retina_image;
+      row.image = '/images/' + row.image;
       
       answer.push(row);
     }
