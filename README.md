@@ -20,7 +20,7 @@ Using npm,
 
 Databases
 ------------
-Well ... so far ...
+Here is some sample data that I am currently working with. Keep in mind that all occurrences of "com.brimstead" are to facilitate _my_ Apple Developer Program subscription. Your identifiers will be different.
 
 - app_products (currently has documents like these)
 
@@ -38,11 +38,11 @@ Well ... so far ...
 		   "_rev": "1-941e2159a8b2e7c6836f30e09f15cc26",
 		   "key": "exchange",
 		   "identifier": "com.brimstead.candystore.exchange",
-		   "durations": [
-		       "com.brimstead.candystore.exchange.7days",
-		       "com.brimstead.candystore.exchange.6mo",
-		       "com.brimstead.candystore.exchange.1yr"
-		   ],
+		   "durations": {
+					"com.brimstead.candystore.exchange.7day":"7 Day Subscription",
+					"com.brimstead.candystore.exchange.6mo":"6 Month Subscription",
+					"com.brimstead.candystore.exchange.1yr":"1 Year Subscription"
+		   },
 		   "retina_image": "exchange@2x.png",
 		   "image": "exchange.png"
 		}
