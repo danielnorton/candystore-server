@@ -56,6 +56,56 @@ app.get('/products', function(req, res) {
     res.send(answer);
   });
 });
+
+app.post('/verifyReceipt', function(req, res) {
+
+  var post = {
+    method:'POST',
+    json:{
+      'receipt-data':req.body.receipt
+    }
+  };
+
+  var validate = function(path, recurse) {
+    
+    console.log(path);
+    
+    post.uri = path;
+    request(post, function(error, response, body) {
+
+      var json = JSON.parse(body);
+      console.log(json);
+      
+      var codeValue = json.status;
+      var transactionIdValue = (json.receipt === undefined)
+      ? ''
+      : json.receipt.original_transaction_id;
+      
+      var answer = {code:codeValue, transactionId:transactionIdValue};
+      res.header('Content-Type', 'application/json');
+      
+      if (codeValue === 21007) {
+         
+        if (recurse) {
+          
+          var sandboxPath = 'https://sandbox.itunes.apple.com/verifyReceipt';
+          validate(sandboxPath, false);
+           
+        } else {
+           
+           res.send(answer);
+        }
+        
+      } else {
+        
+        res.send(answer);
+      }
+    });
+  };
+
+  var path = 'https://buy.itunes.apple.com/verifyReceipt';
+  validate(path, true);
+});
  
 app.listen(3000);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
