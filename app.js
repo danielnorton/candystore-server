@@ -68,13 +68,10 @@ app.post('/verifyReceipt', function(req, res) {
 
   var validate = function(path, recurse) {
     
-    console.log(path);
-    
     post.uri = path;
     request(post, function(error, response, body) {
 
       var json = JSON.parse(body);
-      console.log(json);
       
       var codeValue = json.status;
       var transactionIdValue = (json.receipt === undefined)
