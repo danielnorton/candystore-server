@@ -65,6 +65,11 @@ app.post('/verifyReceipt', function(req, res) {
       'receipt-data':req.body.receipt
     }
   };
+  
+  if (req.body.sharedSecret !== undefined) {
+    
+    post.json.password = req.body.sharedSecret;
+  };
 
   var validate = function(path, recurse) {
     
@@ -79,6 +84,7 @@ app.post('/verifyReceipt', function(req, res) {
       : json.receipt.original_transaction_id;
       
       var answer = {code:codeValue, transactionId:transactionIdValue};
+      
       res.header('Content-Type', 'application/json');
       
       if (codeValue === 21007) {
