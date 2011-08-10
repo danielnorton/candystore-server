@@ -1,6 +1,9 @@
 {
+	"sharedSecret": "e01d3625b9854a33b23b2578a27288d6",
+	"local_root": "http://daniels-lappy.local:3000",
 	"couch_server" : "http://127.0.0.1:5984/",
 	"databases" : {
-		"products": "app_products"
+		"products": "app_products",
+		"exchange": "exchange"
 	}
 }

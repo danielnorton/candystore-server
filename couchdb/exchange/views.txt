@@ -1,0 +1,26 @@
+{
+   "_id": "_design/candy",
+   "_rev": "6-a9538aeb66c25170186fa2867941da96",
+   "language": "javascript",
+   "views": {
+       "allcandyview": {
+           "map": "function(doc) {\n\tif (doc.type === \"candy\") {\n  \temit(doc.productIdentifier, 1);\n\t}\n}",
+           "reduce": "function (key, values, rereduce) {\n    return sum(values);\n}"
+       },
+       "candy_records": {
+           "map": "function(doc) {\n\tif (doc.type === \"candy\") {\n  \temit(doc.productIdentifier, doc);\n\t}\n}"
+       }
+   }
+}
+
+
+{
+   "_id": "_design/customers",
+   "_rev": "10-0823fa0cc482270ac0ed491f889fb1fa",
+   "language": "javascript",
+   "views": {
+       "customersview": {
+           "map": "function(doc) {\n\n\tif (doc.type === 'customer') {\n\n  \t\temit(doc.transactionIdentifier, {\n\t\t\t'_rev':doc._rev,\n\t\t\t'type':doc.type\n\t\t});\n\n\t} else if (doc.type === 'candy') {\n\t\t\n\t\temit(doc.exchangeTransactionIdentifier, {\n\t\t\t'_rev':doc._rev,\n\t\t\t'type':doc.type,\n\t\t\t'transactionIdentifier':doc.transactionIdentifier,\n\t\t\t'productIdentifier':doc.productIdentifier,\n\t\t\t'receipt':doc.receipt\n\t\t});\n\t}\n}"
+       }
+   }
+}
