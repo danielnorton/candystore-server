@@ -121,7 +121,7 @@ module.exports.put = function(req, res) {
       transaction.exchange.transactionIdentifier = exchange.transactionIdentifier;
       transaction.candy.transactionIdentifier = candy.transactionIdentifier;
 
-       var path = config.couch_server + config.databases.exchange + '/_design/customers/_view/customersview?key=%22' + transactionIdentifier + '%22';
+       var path = config.couch_server + config.databases.exchange + '/_design/customers/_view/customersview?key=%22' + exchange.transactionIdentifier + '%22';
         var post = {
           uri: path,
           method:'GET'
@@ -219,6 +219,10 @@ module.exports.put = function(req, res) {
     // Get new exchange count for user to pass to final response
     function getNewExchangeCount(err, exchange, candy) {
       
+      if (err) throw err;
+      
+      log.header('PUT exchange getNewExchangeCount');
+      
       var path = config.local_root + '/exchange/' + transaction.exchange.transactionIdentifier;
       var post = {
         uri: path,
@@ -231,8 +235,6 @@ module.exports.put = function(req, res) {
     // Package up the response and send it to the caller
     function sendAnswer(err, countRaw) {
 
-      var count = JSON.parse(countRaw.body);
-
       var newReceipt = { 'code': 0 };
       if (err) {
         
@@ -241,6 +243,7 @@ module.exports.put = function(req, res) {
         
       } else {
         
+        var count = JSON.parse(countRaw.body);        
         newReceipt.exchange = count;
       }
       
@@ -366,6 +369,10 @@ module.exports.post = function(req, res) {
              
              match = undefined;
            }
+           
+         } else {
+
+           match = undefined;
          }
        };
        
@@ -410,15 +417,15 @@ module.exports.post = function(req, res) {
            '_id': trade.id,
            '_rev': trade.value._rev,
            'type': trade.value.type,
-           'exchangeTransactionIdentifier':otherTrade.value.exchangeTransactionIdentifier,
-           'productIdentifier':trade.value.productIdentifier,
-           'receipt':trade.value.receipt
+           'exchangeTransactionIdentifier': otherTrade.value.exchangeTransactionIdentifier,
+           'productIdentifier': trade.value.productIdentifier,
+           'receipt': trade.value.receipt
          }
          
          var updatePath = config.couch_server + config.databases.exchange + '/' + trade.id;
          var updatePost = {
            uri: updatePath,
-           method:'POST',
+           method:'PUT',
            json:newTrade
          };
          request(updatePost, this.parallel());
@@ -438,6 +445,8 @@ module.exports.post = function(req, res) {
          
          throw 'No trade candy is available';
        }
+       
+       console.log(transaction.answer);
     },
     
     
