@@ -22,6 +22,10 @@ Databases
 ------------
 Here is some sample data that I am currently working with. Keep in mind that all occurrences of "com.brimstead" are to facilitate _my_ Apple Developer Program subscription. Your identifiers will be different.
 
+- exchange
+	- Create the database
+	- create two views based on the contents of /couchdb/exchange/views.txt
+	
 - app_products (currently has documents like these)
 
 		{
