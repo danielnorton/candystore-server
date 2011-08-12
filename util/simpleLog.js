@@ -4,10 +4,7 @@ module.exports.header = function(message) {
 }
 
 module.exports.body = function(message) {
-  
-  var statement = (typeof(message) === 'object')
-  ? JSON.stringify(message)
-  : message;
-  
-  console.log('\n\t' + statement + '\n');
+  console.log('\n');
+  console.log(message);
+  console.log('\n\n');
 }

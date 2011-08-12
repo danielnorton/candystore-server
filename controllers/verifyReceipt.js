@@ -19,7 +19,7 @@ module.exports = function(req, res) {
     }
   };
   
-  if (product.type === 'subscription') {
+  if (product.type === 'exchange') {
     
     post.json.password = config.sharedSecret;
   };
@@ -52,7 +52,7 @@ module.exports = function(req, res) {
       : json.receipt.original_transaction_id;
       
       var answer = {code:codeValue, transactionIdentifier:transactionIdentifierValue};
-      
+
       res.header('Content-Type', 'application/json');
       
       // 21007 = Sandbox receipt sent to production

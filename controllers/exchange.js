@@ -58,7 +58,7 @@ module.exports.get = function(req, res) {
 
 
 // Creates a record for the customer's Exchange receipt and for a
-// candy receipt they would like to 'apply' to their Exchange account.
+// candy receipt they would like to apply to their Exchange account as a credit.
 // If either of these records alrady exists, it will not duplicate them.
 module.exports.put = function(req, res) {
   
@@ -105,18 +105,18 @@ module.exports.put = function(req, res) {
       var exchange = JSON.parse(exchangeRaw.body);
       var candy = JSON.parse(candyRaw.body);
       
-      if (exchange.code === 21006) {
-        
-        throw 'Exchange subscription is expired';
-        
-      } else if (exchange.code !== 0) {
-        
-        throw 'Invalid Exchange subscription';
-        
-      } else if (candy.code !== 0) {
-        
-        throw 'Invalid Candy';
-      }
+      // if (exchange.code === 21006) {
+      //   
+      //   throw 'Exchange subscription is expired';
+      //   
+      // } else if (exchange.code !== 0) {
+      //   
+      //   throw 'Invalid Exchange subscription';
+      //   
+      // } else if (candy.code !== 0) {
+      //   
+      //   throw 'Invalid Candy';
+      // }
       
       transaction.exchange.transactionIdentifier = exchange.transactionIdentifier;
       transaction.candy.transactionIdentifier = candy.transactionIdentifier;
@@ -152,7 +152,7 @@ module.exports.put = function(req, res) {
           exchangeRecordId = row.id;
         };
         
-        if ((type === 'candy') && (row.value.productIdentifier === transaction.candy.productIdentifier)) {
+        if ((type === 'candy') && (row.value.receipt === transaction.candy.receipt)) {
           
           candyRecordId = row.id;
         };
@@ -254,7 +254,7 @@ module.exports.put = function(req, res) {
 };
 
 
-// 'Use' an Exchange credit. Should decrement the caller's exchange credit count
+// Use an Exchange credit. Should decrement the caller's exchange credit count
 // and return a candy receipt to be stored on the client
 module.exports.post = function(req, res) {
   
@@ -299,11 +299,7 @@ module.exports.post = function(req, res) {
       log.body(exchange);
       log.body(candy);
       
-      if (exchange.code === 21006) {
-        
-        throw 'Exchange subscription is expired';
-        
-      } else if (exchange.code !== 0) {
+      if (!((exchange.code === 0) || (exchange.code === 21006))) {
         
         throw 'Invalid Exchange subscription';
         
