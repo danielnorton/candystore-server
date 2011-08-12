@@ -63,7 +63,8 @@ module.exports.get = function(req, res) {
 module.exports.put = function(req, res) {
   
   var transaction = JSON.parse(req.rawBody);
-
+  transaction.code = 0;
+  
   step(
     
     
@@ -76,7 +77,7 @@ module.exports.put = function(req, res) {
         method:'POST',
         json:{
           'receipt':transaction.exchange.receipt,
-          'type':'subscription'
+          'type':'exchange'
         }
       };
       
@@ -105,18 +106,19 @@ module.exports.put = function(req, res) {
       var exchange = JSON.parse(exchangeRaw.body);
       var candy = JSON.parse(candyRaw.body);
       
-      // if (exchange.code === 21006) {
-      //   
-      //   throw 'Exchange subscription is expired';
-      //   
-      // } else if (exchange.code !== 0) {
-      //   
-      //   throw 'Invalid Exchange subscription';
-      //   
-      // } else if (candy.code !== 0) {
-      //   
-      //   throw 'Invalid Candy';
-      // }
+      transaction.code = exchange.code;
+      if (exchange.code === 21006) {
+        
+        throw 'Exchange subscription is expired';
+        
+      } else if (exchange.code !== 0) {
+        
+        throw 'Invalid Exchange subscription';
+        
+      } else if (candy.code !== 0) {
+        
+        throw 'Invalid Candy';
+      }
       
       transaction.exchange.transactionIdentifier = exchange.transactionIdentifier;
       transaction.candy.transactionIdentifier = candy.transactionIdentifier;
@@ -228,6 +230,8 @@ module.exports.put = function(req, res) {
         uri: path,
         method: 'GET'
       };
+      
+      log.body(post);
       request(post, this);
     },
     
@@ -235,10 +239,9 @@ module.exports.put = function(req, res) {
     // Package up the response and send it to the caller
     function sendAnswer(err, countRaw) {
 
-      var newReceipt = { 'code': 0 };
+      var newReceipt = { 'code': transaction.code };
       if (err) {
         
-        newReceipt.code = -1;
         newReceipt.description = err;
         
       } else {
@@ -259,7 +262,8 @@ module.exports.put = function(req, res) {
 module.exports.post = function(req, res) {
   
   var transaction = JSON.parse(req.rawBody);
-
+  transaction.code = 0;
+  
   step(
     
     
@@ -272,7 +276,7 @@ module.exports.post = function(req, res) {
         method:'POST',
         json:{
           'receipt':transaction.exchange.receipt,
-          'type':'subscription'
+          'type':'exchange'
         }
       };
       request(exchangePost, this.parallel());
@@ -299,6 +303,7 @@ module.exports.post = function(req, res) {
       log.body(exchange);
       log.body(candy);
       
+      transaction.code = exchange.code;
       if (!((exchange.code === 0) || (exchange.code === 21006))) {
         
         throw 'Invalid Exchange subscription';
@@ -340,11 +345,13 @@ module.exports.post = function(req, res) {
        
        if (exchange.rows.length === 0) {
          
+         transaction.code = -1;
          throw "Invalid Exchange record";
        };
        
        if (exchange.rows.length < 2) {
 
+         transaction.code = -1;
          throw "Not enough Exchange credits";
        };
        
@@ -439,6 +446,7 @@ module.exports.post = function(req, res) {
          
        } else {
          
+         transaction.code = -1;
          throw 'No trade candy is available';
        }
        
@@ -449,10 +457,9 @@ module.exports.post = function(req, res) {
     // Package up the response and send it to the caller
     function sendAnswer(err) {
     
-      var newReceipt = { 'code': 0 };
+      var newReceipt = { 'code': transaction.code };
       if (err) {
         
-        newReceipt.code = -1;
         newReceipt.description = err;
         
       } else {
