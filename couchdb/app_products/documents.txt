@@ -1,0 +1,53 @@
+{
+   "key": "candy",
+   "identifier": "com.brimstead.candystore.purplecandy",
+   "retina_image": "purpleCandy@2x.png",
+   "image": "purpleCandy.png"
+}
+
+{
+   "key": "candy",
+   "identifier": "com.brimstead.candystore.greencandy",
+   "retina_image": "greenCandy@2x.png",
+   "image": "greenCandy.png"
+}
+
+{	
+   "key": "candy",
+   "identifier": "com.brimstead.candystore.redcandy",
+   "retina_image": "redCandy@2x.png",
+   "image": "redCandy.png"
+}
+
+{
+   "key": "candy",
+   "identifier": "com.brimstead.candystore.orangecandy",
+   "retina_image": "orangeCandy@2x.png",
+   "image": "orangeCandy.png"
+}
+
+{
+   "key": "candy",
+   "identifier": "com.brimstead.candystore.bluecandy",
+   "retina_image": "blueCandy@2x.png",
+   "image": "blueCandy.png"
+}
+
+{
+   "key": "exchange",
+   "identifier": "com.brimstead.candystore.exchange",
+   "durations": {
+       "com.brimstead.candystore.exchange.7day": "7 Day Subscription",
+       "com.brimstead.candystore.exchange.6mo": "6 Month Subscription",
+       "com.brimstead.candystore.exchange.1yr": "1 Year Subscription"
+   },
+   "retina_image": "exchange@2x.png",
+   "image": "exchange.png"
+}
+
+{
+   "key": "bigcandyjar",
+   "identifier": "com.brimstead.candystore.bigcandyjar",
+   "retina_image": "bigCandyJar@2x.png",
+   "image": "bigCandyJar.png"
+}
